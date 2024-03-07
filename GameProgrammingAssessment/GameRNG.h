@@ -13,6 +13,8 @@ public:
 	* Provides a random integer between min and max (both inclusive)
 	*/
 	static float randf(float min, float max);
+	static void Seed();
+private:
 	RNG();// DO NOT CALL MANUALLY, USE STATIC FUNCTIONS
 	~RNG();
 };

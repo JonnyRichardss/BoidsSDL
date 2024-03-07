@@ -3,6 +3,7 @@
 GameObject::GameObject()
 {
 	shown = true;
+	scene = nullptr;
 	visuals = new RenderableComponent();
 	renderer = RenderEngine::GetInstance();
 	//engine = GameEngine::GetInstance();
@@ -87,6 +88,11 @@ void GameObject::Show()
 void GameObject::ToggleVisibility()
 {
 	shown = shown ? false : true;
+}
+
+void GameObject::SetOwner(GameScene* owner)
+{
+	scene = owner;
 }
 
 void GameObject::DrawBoundingBox()

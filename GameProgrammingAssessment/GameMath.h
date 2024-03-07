@@ -51,6 +51,11 @@ struct Vector2 {
     static float dot(Vector2 a, Vector2 b) {
         return (a.x * b.x) + (a.y * b.y);
     }
+    static float AngleBetweenRAD(Vector2 a, Vector2 b) {
+        //https://stackoverflow.com/questions/14066933/direct-way-of-computing-the-clockwise-angle-between-two-vectors
+        float det = a.x * b.y - a.y * b.x;
+        return (atan2(det, dot(a, b)));
+    }
     float GetMagnitude() {
         return sqrt(pow(x, 2) + pow(y, 2));
     }
@@ -60,6 +65,7 @@ struct Vector2 {
         float _y = y / mag;
         return Vector2(_x, _y);
     }
+    
 };
 long double Lerp(long double a, long double b, long double fac);
 #endif // !USE_GAMEMATH

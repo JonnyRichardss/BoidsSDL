@@ -1,21 +1,24 @@
 #include "GameRNG.h"
-#include <stdlib.h>
-#include <time.h>
-static RNG instance;
+#include <cstdlib>
+#include <ctime>
+static RNG* instance;
 int RNG::randi(int min, int max)
 {
-	return rand() % (max+1) + min;
+	return (int)randf(min, max);
 }
 
 float RNG::randf(float min, float max)
 {
 	float diff = max - min;
-	float normalRand = (float)rand() / (float)RAND_MAX;
-	return normalRand * diff + min;
+	float normalisedRand = (float)rand() / (float)RAND_MAX;
+	return normalisedRand * diff + min;
+}
+void RNG::Seed() {
+	srand((unsigned int)time(NULL));
 }
 RNG::RNG() 
 {
-	srand(time(NULL));
+	
 }
 RNG::~RNG()
 {

@@ -7,6 +7,7 @@
 #include "ColourRGBA.h"
 #include <string>
 class GameEngine; //forward definition to prevent circular includes in header
+class GameScene;
 class GameObject
 {
 public:
@@ -19,6 +20,7 @@ public:
 	void ToggleVisibility();
 	virtual void Init() = 0;
 	virtual void InitVisuals() = 0;
+	void SetOwner(GameScene* owner);
 	void DrawBoundingBox();
 	bool GetStaticStatus();
 	void MoveVisuals();
@@ -43,6 +45,7 @@ protected:
 	GameLogging* logging;
 	RenderEngine* renderer;
 	//GameEngine* engine;
+	GameScene* scene;
 	GameClock* clock;
 	SDL_Window* window;
 	SDL_Renderer* renderContext;

@@ -40,7 +40,7 @@ SDL_Renderer* RenderEngine::GetRenderContext()
 
 void RenderEngine::RenderFrame()
 {
-    SDL_SetRenderDrawColor(renderContext, 0, 0, 0, 0); //backg colour
+    SDL_SetRenderDrawColor(renderContext, 90, 55,55, 0); //backg colour
     SDL_RenderClear(renderContext);
     // test code
     /*

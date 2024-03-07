@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Boid.cpp" />
+    <ClCompile Include="BoidManager.cpp" />
     <ClCompile Include="BoidScene.cpp" />
     <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GameClock.cpp" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boid.h" />
+    <ClInclude Include="BoidManager.h" />
     <ClInclude Include="BoidScene.h" />
     <ClInclude Include="ColourRGBA.h" />
     <ClInclude Include="FPSCounter.h" />

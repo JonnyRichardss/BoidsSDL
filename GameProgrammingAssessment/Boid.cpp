@@ -3,12 +3,15 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "GameRNG.h"
+#include "BoidScene.h"
+#include "BoidManager.h"
 void Boid::Init()
 {
-	BoundingBox = Vector2(5, 10);
+	BoundingBox = Vector2(BOID_SIZE, BOID_SIZE * 2);
 	shown = true;
-	heading = RNG::randf(0, 2 * M_PI);
+	facing = RNG::randf(0, 2 * M_PI);
 	velocity = Vector2::zero();
+	position = Vector2(RNG::randi(0, GAME_MAX_X * 2) - GAME_MAX_X, RNG::randi(0, GAME_MAX_Y * 2) - GAME_MAX_Y); //maybe ill eventually fix my random functions to behave with -ve values
 	DoRotation();
 	//dont know its necessary here but TODO a way for a gameobject to access its parent scene
 	//maybe just a call to engine to register OR access currentScene through engine
@@ -30,6 +33,7 @@ void Boid::InitVisuals()
 	}
 	SDL_Texture* Tex = SDL_CreateTextureFromSurface(RenderEngine::GetInstance()->GetRenderContext(), Surf);
 	SDL_FreeSurface(Surf);
+	SDL_SetTextureColorMod(Tex,RNG::randi(0,0),RNG::randi(0,128),RNG::randi(128,255));
 	visuals->UpdateTexture(Tex);
 
 	SDL_Rect DefaultRect = BBtoDestRect();
@@ -37,13 +41,102 @@ void Boid::InitVisuals()
 
 }
 
+void Boid::SetManager(BoidManager* newManager)
+{
+	manager = newManager;
+}
+
 void Boid::Update()
 {
-	heading+=0.25f;
+	Neighbours.clear();
+	Neighbours = GetVisibleBoids();
+	Vector2 SteerTarget = Vector2::zero();
+	DoSeparation(SteerTarget);
+	DoAlignment(SteerTarget);
+	DoCohesion(SteerTarget);
+	SteerTowards(SteerTarget);
+	ScreenWrap();
 	DoRotation();
 }
 
 void Boid::DoRotation()
 {
-	velocity = Vector2(sin(heading) * BOID_SPEED, cos(heading)*BOID_SPEED);
+	velocity = Vector2(sin(facing) * BOID_SPEED, cos(facing)*BOID_SPEED);
+}
+
+void Boid::ScreenWrap()
+{
+	if (position.x > GAME_MAX_X) {
+		position.x = -GAME_MAX_X;
+	}
+	else if (position.x < -GAME_MAX_X) {
+		position.x = GAME_MAX_X;
+	}
+	if (position.y > GAME_MAX_Y) {
+		position.y = -GAME_MAX_Y;
+	}
+	else if (position.y < -GAME_MAX_Y) {
+		position.y = GAME_MAX_Y;
+	}
+}
+
+void Boid::SteerTowards(Vector2 target)
+{
+	facing += Vector2::AngleBetweenRAD(velocity, target) * BOID_STEER_MULTIPLIER;
+}
+
+std::vector<Boid*> Boid::GetVisibleBoids()
+{
+	std::vector<Boid*> output;
+	for (Boid* b : manager->AllBoids) {
+		Vector2 vec = GetBoidVec(b);
+		if (b == this)
+			continue;
+		if (vec.GetMagnitude() < BOID_VISION_DISTANCE && abs(Vector2::AngleBetweenRAD(velocity, vec)) < BOID_VISION_ANGLE) {
+			output.push_back(b);
+		}
+	}
+	return output;
+}
+
+Vector2 Boid::GetBoidVec(Boid* other)
+{
+	return position - other->position;
+}
+
+void Boid::DoSeparation(Vector2& target)
+{
+	if (Neighbours.empty())
+		return;
+	Vector2 OppositeHeading = Vector2::zero();
+	for (Boid* b : Neighbours) {
+		OppositeHeading -= GetBoidVec(b);
+	}
+	OppositeHeading *= 1.0f / (float)Neighbours.size();
+	target += OppositeHeading * BOID_SEPARATION_STRENGTH;
+}
+
+void Boid::DoAlignment(Vector2& target)
+{
+	if (Neighbours.empty())
+		return;
+	Vector2 LocalAverageHeading = Vector2::zero();
+	for (Boid* b : Neighbours) {
+		LocalAverageHeading -= b->velocity;
+	}
+	LocalAverageHeading = LocalAverageHeading.Normalise();
+	target += LocalAverageHeading * BOID_ALIGNMENT_STRENGTH;
+}
+
+void Boid::DoCohesion(Vector2& target)
+{
+	if (Neighbours.empty())
+		return;
+	Vector2 LocalCentre = Vector2::zero();
+	for (Boid* b : Neighbours) {
+		LocalCentre += b->position;
+	}
+	LocalCentre *=  1.0f / (float)Neighbours.size();
+
+	target += (position - LocalCentre) * BOID_COHESION_STRENGTH;
 }

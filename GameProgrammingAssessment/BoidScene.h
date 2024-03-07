@@ -7,6 +7,8 @@ public:
 	BoidScene();
 	~BoidScene();
 	void CreateObjects();
+private:
+	
 };
 
 #endif // !USE_BOIDSCENE

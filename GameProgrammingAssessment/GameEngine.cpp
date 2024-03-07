@@ -1,6 +1,7 @@
 #include "GameEngine.h"
 //#include "IncludeGameObjects.h"
 #include "IncludeScenes.h"
+#include "GameRNG.h"
 static GameEngine* _instance;
 GameEngine::GameEngine()
 {
@@ -12,6 +13,7 @@ GameEngine::GameEngine()
     clock = GameClock::GetInstance();
     renderer = RenderEngine::GetInstance();
     logging->Log("Initialised game engine.");
+    RNG::Seed();
 }
 
 GameEngine::~GameEngine()
