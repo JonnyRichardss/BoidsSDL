@@ -11,7 +11,6 @@ GameEngine::GameEngine()
     }
     clock = GameClock::GetInstance();
     renderer = RenderEngine::GetInstance();
-    audio = AudioEngine::GetInstance();
     logging->Log("Initialised game engine.");
 }
 
@@ -36,11 +35,9 @@ void GameEngine::StartLoop()
 
  void GameEngine::CreateScenes()
 {
-     GameScene* scene0 = new EshopScene();
+     //push back scenes
+     GameScene* scene0 = new BoidScene();
      AllScenes.push_back(scene0);
-
-
-
      for (auto Scene : AllScenes) {
          Scene->CreateObjects();
          logging->FileLog("Created object queues for all scenes.");
@@ -80,7 +77,7 @@ void GameEngine::ProcessEvents()
                 FPS->ToggleVisibility();
                 break;
             case SDLK_SPACE:
-                audio->ToggleTrack();
+                //dothings
                 break;
             }
         }

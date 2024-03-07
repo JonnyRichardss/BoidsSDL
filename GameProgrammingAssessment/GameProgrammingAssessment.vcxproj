@@ -127,9 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AudioEngine.cpp" />
-    <ClCompile Include="EshopAnim.cpp" />
-    <ClCompile Include="EshopScene.cpp" />
+    <ClCompile Include="BoidScene.cpp" />
     <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GameClock.cpp" />
     <ClCompile Include="GameEngine.cpp" />
@@ -144,14 +142,11 @@
     <ClCompile Include="RenderableComponent.cpp" />
     <ClCompile Include="RenderEngine.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
-    <ClCompile Include="SpriteSheetTest.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AudioEngine.h" />
+    <ClInclude Include="BoidScene.h" />
     <ClInclude Include="ColourRGBA.h" />
-    <ClInclude Include="EshopAnim.h" />
-    <ClInclude Include="EshopScene.h" />
     <ClInclude Include="FPSCounter.h" />
     <ClInclude Include="GameClock.h" />
     <ClInclude Include="GameEngine.h" />
@@ -168,7 +163,6 @@
     <ClInclude Include="RenderableComponent.h" />
     <ClInclude Include="RenderEngine.h" />
     <ClInclude Include="SpriteSheet.h" />
-    <ClInclude Include="SpriteSheetTest.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>

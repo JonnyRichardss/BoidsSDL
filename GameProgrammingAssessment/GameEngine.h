@@ -8,7 +8,7 @@
 #include "Global_Flags.h"
 #include "GameLogging.h"
 #include "GameScene.h"
-#include "AudioEngine.h"
+
 #include <vector>
 class GameEngine
 {
@@ -21,7 +21,6 @@ private:
 	~GameEngine();
 	GameLogging* logging;
 	RenderEngine* renderer;
-	AudioEngine* audio;
 	GameClock* clock;
 	FPSCounter* FPS;
 	GameScene* ActiveScene;
