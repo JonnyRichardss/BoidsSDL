@@ -30,6 +30,7 @@ protected:
 	
 	int windowWidth, windowHeight;
 	std::string name;
+	float facing;
 	Vector2 position;
 	Vector2 velocity;
 	Vector2 BoundingBox;

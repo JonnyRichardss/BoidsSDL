@@ -52,7 +52,7 @@ void RenderEngine::RenderFrame()
     */
     std::sort(RenderQueue.begin(),RenderQueue.end(), [](auto a, auto b){return *a < *b;});
     for (RenderableComponent* c : RenderQueue) {
-        SDL_RenderCopy(renderContext, c->GetTexture(), c->GetSourcePos(), c->GetDestPos());
+        SDL_RenderCopyEx(renderContext, c->GetTexture(), c->GetSourcePos(), c->GetDestPos(),c->GetAngle(),c->GetCentrePoint(), c->GetFlip());
     }
     RenderQueue.clear();
     SDL_RenderPresent(renderContext);

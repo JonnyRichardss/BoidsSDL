@@ -1,11 +1,14 @@
 #include "RenderableComponent.h"
-
+#include "GameMath.h"
 RenderableComponent::RenderableComponent()
 {
 	texture = nullptr;
 	destination_pos = nullptr;
 	source_pos = nullptr;
+	centrePoint = nullptr;
 	layer = 0;
+	angle = 0;
+	flip = SDL_FLIP_NONE;
 	logging = GameLogging::GetInstance();
 }
 
@@ -57,9 +60,24 @@ SDL_Texture* RenderableComponent::GetTexture()
 	return texture;
 }
 
+SDL_Point* RenderableComponent::GetCentrePoint()
+{
+	return centrePoint;
+}
+
+SDL_RendererFlip RenderableComponent::GetFlip()
+{
+	return flip;
+}
+
 int RenderableComponent::GetLayer()
 {
 	return layer;
+}
+
+double RenderableComponent::GetAngle()
+{
+	return angle;
 }
 
 void RenderableComponent::UpdateLayer(int newLayer)
@@ -88,6 +106,28 @@ void RenderableComponent::UpdateTexture(SDL_Texture* newTex)
 	if (texture !=nullptr)
 		SDL_DestroyTexture(texture);
 	texture = newTex;
+}
+
+void RenderableComponent::UpdateCentrePoint(Vector2 newPoint)
+{
+	if (centrePoint == nullptr)
+		centrePoint = new SDL_Point();
+	*centrePoint = { (int)newPoint.x,(int)newPoint.y };
+}
+
+void RenderableComponent::UpdateAngleRAD(double newAngle)
+{
+	UpdateAngleDEG((newAngle * 180.0f) / M_PI);
+}
+
+void RenderableComponent::UpdateAngleDEG(double newAngle)
+{
+	angle = newAngle;
+}
+
+void RenderableComponent::UpdateFlip(SDL_RendererFlip newFlip)
+{
+	flip = newFlip;
 }
 
 bool RenderableComponent::operator>(const RenderableComponent& other)
