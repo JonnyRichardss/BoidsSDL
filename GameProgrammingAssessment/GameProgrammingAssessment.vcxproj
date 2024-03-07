@@ -24,6 +24,7 @@
     <ProjectGuid>{f5424338-dd34-478f-aeac-dec368af1898}</ProjectGuid>
     <RootNamespace>GameProgrammingAssessment</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>BoidsSDL</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Boid.cpp" />
     <ClCompile Include="BoidScene.cpp" />
     <ClCompile Include="FPSCounter.cpp" />
     <ClCompile Include="GameClock.cpp" />
@@ -145,6 +147,7 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Boid.h" />
     <ClInclude Include="BoidScene.h" />
     <ClInclude Include="ColourRGBA.h" />
     <ClInclude Include="FPSCounter.h" />

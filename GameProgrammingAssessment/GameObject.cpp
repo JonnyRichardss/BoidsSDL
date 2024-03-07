@@ -61,7 +61,8 @@ void GameObject::GetWindowParams()
 bool GameObject::UpdateAndRender(RenderableComponent*& render)
 {
 	Update();
-
+	if (!is_static)
+		position += velocity;
 	if (shown) {
 		if (!is_static)
 			MoveVisuals();

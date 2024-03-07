@@ -5,7 +5,13 @@
 class RNG
 {
 public:
+	/*
+	* Provides a random integer between min and max (both inclusive)
+	*/
 	static int randi(int min, int max);
+	/*
+	* Provides a random integer between min and max (both inclusive)
+	*/
 	static float randf(float min, float max);
 	RNG();// DO NOT CALL MANUALLY, USE STATIC FUNCTIONS
 	~RNG();
