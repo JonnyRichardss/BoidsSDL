@@ -3,7 +3,7 @@
 #include <cmath>
 #include <sstream>
 #include <algorithm>
-
+#include "Boid.h"
 static RenderEngine* _instance;
 RenderEngine* RenderEngine::GetInstance()
 {
@@ -37,7 +37,7 @@ SDL_Renderer* RenderEngine::GetRenderContext()
 {
     return renderContext;
 }
-
+static Boid* brian;
 void RenderEngine::RenderFrame()
 {
     SDL_SetRenderDrawColor(renderContext, 90, 55,55, 0); //backg colour
@@ -55,6 +55,9 @@ void RenderEngine::RenderFrame()
         SDL_RenderCopyEx(renderContext, c->GetTexture(), c->GetSourcePos(), c->GetDestPos(),c->GetAngle(),c->GetCentrePoint(), c->GetFlip());
     }
     RenderQueue.clear();
+    if (BRIAN_DEBUG && brian !=nullptr) {
+        brian->DrawBrianDebug();
+    }
     SDL_RenderPresent(renderContext);
 }
 
@@ -70,5 +73,7 @@ void RenderEngine::Enqueue(RenderableComponent* object)
 {
     RenderQueue.push_back(object);
 }
-
+void RenderEngine::SetBrian(Boid* _brian) {
+    brian = _brian;
+}
 

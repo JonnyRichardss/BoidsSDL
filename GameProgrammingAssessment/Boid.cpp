@@ -34,6 +34,9 @@ void Boid::InitVisuals()
 	SDL_Texture* Tex = SDL_CreateTextureFromSurface(RenderEngine::GetInstance()->GetRenderContext(), Surf);
 	SDL_FreeSurface(Surf);
 	SDL_SetTextureColorMod(Tex,RNG::randi(0,0),RNG::randi(0,128),RNG::randi(128,255));
+	if (isBrian) {
+		SDL_SetTextureColorMod(Tex, 255,0,0);
+	}
 	visuals->UpdateTexture(Tex);
 
 	SDL_Rect DefaultRect = BBtoDestRect();
@@ -44,6 +47,12 @@ void Boid::InitVisuals()
 void Boid::SetManager(BoidManager* newManager)
 {
 	manager = newManager;
+}
+
+void Boid::MakeBrian()
+{
+	isBrian = true;
+
 }
 
 void Boid::Update()
@@ -57,6 +66,9 @@ void Boid::Update()
 	SteerTowards(SteerTarget);
 	ScreenWrap();
 	DoRotation();
+	if (isBrian) {
+
+	}
 }
 
 void Boid::DoRotation()
@@ -139,4 +151,20 @@ void Boid::DoCohesion(Vector2& target)
 	LocalCentre *=  1.0f / (float)Neighbours.size();
 
 	target += (position - LocalCentre) * BOID_COHESION_STRENGTH;
+}
+
+void Boid::DrawBrianDebug()
+{
+	float minAngle = facing - BOID_VISION_ANGLE;
+	float maxAngle = facing + BOID_VISION_ANGLE;
+	float angleRange = maxAngle - minAngle;
+	float currentAngle = minAngle;
+	int maxi = 20;
+	SDL_SetRenderDrawColor(renderContext, 255, 255, 255, 255);
+	for (int i = 0; i < maxi; i++) {
+		Vector2 windowPos = GameToWindowCoords(position);
+		Vector2 circlePos = GameToWindowCoords(Vector2((cos(currentAngle) * BOID_VISION_DISTANCE + position.x), (sin(currentAngle) * BOID_VISION_DISTANCE + position.y)));
+		SDL_RenderDrawLine(renderContext,windowPos.x,windowPos.y,circlePos.x,circlePos.y);
+		currentAngle += angleRange / maxi;
+	}
 }

@@ -7,6 +7,7 @@
 #include "RenderableComponent.h"
 #include <vector>
 #include "GameLogging.h"
+class Boid;
 class RenderEngine
 {
 public:
@@ -18,6 +19,7 @@ public:
 	void ToggleFullscreen();
 
 	void Enqueue(RenderableComponent* object);
+	void SetBrian(Boid* _brian);
 private:
 	RenderEngine();
 	~RenderEngine();

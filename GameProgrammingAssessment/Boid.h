@@ -9,9 +9,12 @@ public:
 	void Init();
 	void InitVisuals();
 	void SetManager(BoidManager* newManager);
+	void MakeBrian();
+	void DrawBrianDebug();
 protected:
 	std::vector<Boid*> Neighbours;
 	BoidManager* manager;
+	bool isBrian = false;
 	void Update();
 	void DoRotation();
 	void ScreenWrap();
@@ -21,6 +24,7 @@ protected:
 	void DoSeparation(Vector2& target);
 	void DoAlignment(Vector2& target);
 	void DoCohesion(Vector2& target);
+	
 };
 #endif // !USE_BOID
 
