@@ -51,6 +51,22 @@ void GameClock::Tick()
 		profileLog.append("INPUT - "+std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(input_tp - frame_start_tp).count())+"\u00B5s\n");
 		profileLog.append("UPDATE - " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(update_tp - input_tp).count()) + "\u00B5s\n");
 		profileLog.append("RENDER - " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(render_tp - update_tp).count()) + "\u00B5s\n");
+		//UNLESS I REWORK PROFILING SPECIAL TPS *HAVE* TO BE IN UPDATE
+		//also i cant use this for what i wanted to LOL
+		//HAVE ENUM SPECIAL TP PHASE
+		//MAYBE SPECIAL TP STRUCT??????
+		//SEEMS LOGICAL
+
+		if (!special_tps.empty()) {
+			for (int i = 0; i < special_tps.size(); i++) {
+				if (i == 0)
+					profileLog.append(special_tp_names[i] + " - " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(special_tps[i] - update_tp).count()) + "\u00B5s\n");
+				else
+					profileLog.append(special_tp_names[i] + " - " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(special_tps[i] - special_tps[i-1]).count()) + "\u00B5s\n");
+			}
+			special_tps.clear();
+			special_tp_names.clear();
+		}
 		logging->Log(profileLog);
 	}
 	
@@ -98,16 +114,16 @@ void GameClock::TickProfiling(ProfilerPhases phase)
 		return;
 	auto TP = std::chrono::high_resolution_clock::now();
 	switch (phase) {
-		case START:
+		case STARTPHASE:
 			frame_start_tp = TP;
 			break;
-		case INPUT:
+		case INPUTPHASE:
 			input_tp = TP;
 			break;
-		case UPDATE:
+		case UPDATEPHASE:
 			update_tp = TP;
 			break;
-		case RENDER:
+		case RENDERPHASE:
 			render_tp = TP;
 			break;
 		default:
@@ -115,6 +131,10 @@ void GameClock::TickProfiling(ProfilerPhases phase)
 			//pretty sure the enum prevents invalid values being set but this isnt hurting anyone so
 			break;
 	}
+}
+void GameClock::TickProfilingSpecial(std::string name) {
+	special_tps.push_back(std::chrono::high_resolution_clock::now());
+	special_tp_names.push_back(name);
 }
 
 void GameClock::SetFPSLimit(int newLimit)

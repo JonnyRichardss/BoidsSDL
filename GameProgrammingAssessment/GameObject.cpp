@@ -106,6 +106,11 @@ void GameObject::DrawBoundingBox()
 	SDL_RenderDrawPoint(renderContext, WindowPos.x, WindowPos.y);
 }
 
+float GameObject::GetFacing()
+{
+	return facing;
+}
+
 bool GameObject::GetStaticStatus()
 {
 	return is_static;
@@ -114,6 +119,11 @@ bool GameObject::GetStaticStatus()
 Vector2 GameObject::GetPos()
 {
 	return position;
+}
+
+Vector2 GameObject::GetVelo()
+{
+	return velocity;
 }
 
 Vector2 GameObject::GetBB()

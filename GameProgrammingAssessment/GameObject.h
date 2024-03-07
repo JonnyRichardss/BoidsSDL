@@ -22,10 +22,12 @@ public:
 	virtual void InitVisuals() = 0;
 	void SetOwner(GameScene* owner);
 	void DrawBoundingBox();
+	float GetFacing();
 	bool GetStaticStatus();
 	void MoveVisuals();
 	std::string GetName();
 	Vector2 GetPos();
+	Vector2 GetVelo();
 	Vector2 GetBB();
 protected:
 	virtual void Update() = 0;

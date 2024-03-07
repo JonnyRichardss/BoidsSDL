@@ -99,16 +99,16 @@ void GameEngine::FPSUpdate() {
 
 void GameEngine::GameLoop() {
     while (!ENGINE_QUIT_FLAG) {
-        clock->TickProfiling(START);
+        clock->TickProfiling(STARTPHASE);
         ProcessEvents();
-        clock->TickProfiling(INPUT);
+        clock->TickProfiling(INPUTPHASE);
         ActiveScene->Update();
         FPSUpdate();
-        clock->TickProfiling(UPDATE);
+        clock->TickProfiling(UPDATEPHASE);
         renderer->RenderFrame();
         if (DEBUG_DRAW_BB)
            ActiveScene->DrawBBs();
-        clock->TickProfiling(RENDER);
+        clock->TickProfiling(RENDERPHASE);
         clock->Tick();
         if (DO_BATCH_LOGGING)
             logging->SaveLogFile();

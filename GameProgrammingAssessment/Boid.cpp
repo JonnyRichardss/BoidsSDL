@@ -13,6 +13,7 @@ void Boid::Init()
 	velocity = Vector2::zero();
 	position = Vector2(RNG::randi(0, GAME_MAX_X * 2) - GAME_MAX_X, RNG::randi(0, GAME_MAX_Y * 2) - GAME_MAX_Y); //maybe ill eventually fix my random functions to behave with -ve values
 	DoRotation();
+	steerTarget = Vector2::zero();
 	//dont know its necessary here but TODO a way for a gameobject to access its parent scene
 	//maybe just a call to engine to register OR access currentScene through engine
 }
@@ -57,18 +58,18 @@ void Boid::MakeBrian()
 
 void Boid::Update()
 {
-	Neighbours.clear();
-	Neighbours = GetVisibleBoids();
-	Vector2 SteerTarget = Vector2::zero();
-	DoSeparation(SteerTarget);
-	DoAlignment(SteerTarget);
-	DoCohesion(SteerTarget);
-	SteerTowards(SteerTarget);
+	
+	if (!hasNeighbours) {
+		manager->PopulateNeighbours();
+	}
+	hasNeighbours = false;
+	//CPU calculate neighbours
+	//Neighbours.clear();
+	//Neighbours = GetVisibleBoids();
+	SteerTowards(steerTarget);
 	ScreenWrap();
 	DoRotation();
-	if (isBrian) {
-
-	}
+	
 }
 
 void Boid::DoRotation()
@@ -116,8 +117,9 @@ Vector2 Boid::GetBoidVec(Boid* other)
 	return position - other->position;
 }
 
-void Boid::DoSeparation(Vector2& target)
+void Boid::DoSeparation(Vector2 vec)
 {
+	/*
 	if (Neighbours.empty())
 		return;
 	Vector2 OppositeHeading = Vector2::zero();
@@ -126,10 +128,17 @@ void Boid::DoSeparation(Vector2& target)
 	}
 	OppositeHeading *= 1.0f / (float)Neighbours.size();
 	target += OppositeHeading * BOID_SEPARATION_STRENGTH;
+	*/
+	if (numNeighbours == 0)
+		return;
+	vec *= (1.0 / numNeighbours);
+	vec *= BOID_SEPARATION_STRENGTH;
+	steerTarget += vec;
 }
 
-void Boid::DoAlignment(Vector2& target)
+void Boid::DoAlignment(Vector2 vec)
 {
+	/*
 	if (Neighbours.empty())
 		return;
 	Vector2 LocalAverageHeading = Vector2::zero();
@@ -138,10 +147,17 @@ void Boid::DoAlignment(Vector2& target)
 	}
 	LocalAverageHeading = LocalAverageHeading.Normalise();
 	target += LocalAverageHeading * BOID_ALIGNMENT_STRENGTH;
+	*/
+	if (numNeighbours == 0)
+		return;
+	vec = vec.Normalise();
+	vec *= BOID_ALIGNMENT_STRENGTH;
+	steerTarget += vec;
 }
 
-void Boid::DoCohesion(Vector2& target)
+void Boid::DoCohesion(Vector2 vec)
 {
+	/*
 	if (Neighbours.empty())
 		return;
 	Vector2 LocalCentre = Vector2::zero();
@@ -151,6 +167,13 @@ void Boid::DoCohesion(Vector2& target)
 	LocalCentre *=  1.0f / (float)Neighbours.size();
 
 	target += (position - LocalCentre) * BOID_COHESION_STRENGTH;
+	*/
+	if (numNeighbours == 0)
+		return;
+	vec *= (1.0 / numNeighbours);
+	vec = position - vec;
+	vec *= BOID_COHESION_STRENGTH;
+	steerTarget += vec;
 }
 
 void Boid::DrawBrianDebug()
@@ -167,4 +190,14 @@ void Boid::DrawBrianDebug()
 		SDL_RenderDrawLine(renderContext,windowPos.x,windowPos.y,circlePos.x,circlePos.y);
 		currentAngle += angleRange / maxi;
 	}
+}
+
+void Boid::ParseStruct(BoidInfo info)
+{
+	hasNeighbours = true;
+	this->numNeighbours = info.numNeighbours;
+	DoSeparation(Vector2(info.sepX,info.sepY));
+	DoAlignment(Vector2(info.aligX,info.aligY));
+	DoCohesion(Vector2(info.cohesX,info.cohesY));
+	
 }

@@ -3,7 +3,7 @@
 #include <chrono>
 #include "GameLogging.h"
 using namespace std::chrono_literals;
-enum ProfilerPhases {START,INPUT,UPDATE,RENDER};
+enum ProfilerPhases {STARTPHASE,INPUTPHASE,UPDATEPHASE,RENDERPHASE};
 class GameClock
 {
 public:
@@ -15,6 +15,7 @@ public:
 	std::chrono::high_resolution_clock::time_point GetTimePoint();
 	int GetFPS();
 	void TickProfiling(ProfilerPhases phase);
+	void TickProfilingSpecial(std::string name);
 private:
 	GameClock();
 	~GameClock();
@@ -27,7 +28,8 @@ private:
 	std::chrono::high_resolution_clock::time_point input_tp;
 	std::chrono::high_resolution_clock::time_point update_tp;
 	std::chrono::high_resolution_clock::time_point render_tp;
-
+	std::vector<std::chrono::high_resolution_clock::time_point> special_tps;
+	std::vector<std::string> special_tp_names;
 	std::chrono::nanoseconds frametime_ns;
 	std::chrono::nanoseconds unused_ns;
 	std::chrono::nanoseconds target_ns;
