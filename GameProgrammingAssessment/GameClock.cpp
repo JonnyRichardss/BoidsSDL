@@ -60,7 +60,7 @@ void GameClock::Tick()
 		if (!special_tps.empty()) {
 			for (int i = 0; i < special_tps.size(); i++) {
 				if (i == 0)
-					profileLog.append(special_tp_names[i] + " - " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(special_tps[i] - update_tp).count()) + "\u00B5s\n");
+					profileLog.append(special_tp_names[i] + " - " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(special_tps[i] - input_tp).count()) + "\u00B5s\n");
 				else
 					profileLog.append(special_tp_names[i] + " - " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(special_tps[i] - special_tps[i-1]).count()) + "\u00B5s\n");
 			}

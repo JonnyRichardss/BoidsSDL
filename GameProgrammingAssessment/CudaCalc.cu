@@ -17,26 +17,26 @@ struct CudaBoidStruct {
 //(as from my previous AMP code) most of this adapted from
 //https://github.com/SebLague/Boids/blob/master/Assets/Scripts/BoidCompute.compute
 __global__ void GPUDoCalc(CudaBoidStruct* boids, int size, float sqrVisDist, float sqrAvoidDist) {
-	int itest = blockIdx.x;
-	int jtest = threadIdx.x;
+	int itest = blockIdx.x * blockDim.x + threadIdx.x;
+
 	//for (int i = 0; i < size; i++) {
-		//for (int j = 0; j < size; j++) {
+	for (int jtest = 0; jtest < size; jtest++) {
 			//if (i == j) continue;
-	if (itest == jtest) return;
-			float2 offset = make_float2(boids[itest].position.x - boids[jtest].position.x, boids[itest].position.y - boids[jtest].position.y);
-			float sqrDist = offset.x * offset.x + offset.y * offset.y;
-			if (sqrDist < sqrVisDist) {
-				boids[itest].numNeighbours++;
-				boids[itest].aligOutput.x -= boids[jtest].velocity.x;
-				boids[itest].aligOutput.y -= boids[jtest].velocity.y;
-				boids[itest].cohesOutput.x += boids[jtest].position.x;
-				boids[itest].cohesOutput.y += boids[jtest].position.y;
-			}
-			if (sqrDist < sqrAvoidDist) {
-				boids[itest].sepOutput.x -= offset.x;
-				boids[itest].sepOutput.y -= offset.y;
-			}
-		//}
+		if (itest == jtest) continue;
+		float2 offset = make_float2(boids[itest].position.x - boids[jtest].position.x, boids[itest].position.y - boids[jtest].position.y);
+		float sqrDist = offset.x * offset.x + offset.y * offset.y;
+		if (sqrDist < sqrVisDist) {
+			boids[itest].numNeighbours++;
+			boids[itest].aligOutput.x += boids[jtest].velocity.x;
+			boids[itest].aligOutput.y += boids[jtest].velocity.y;
+			boids[itest].cohesOutput.x += boids[jtest].position.x;
+			boids[itest].cohesOutput.y += boids[jtest].position.y;
+		}
+		if (sqrDist < sqrAvoidDist) {
+			boids[itest].sepOutput.x -= offset.x;
+			boids[itest].sepOutput.y -= offset.y;
+		}
+		}
 	//}
 }
 namespace JRCudaCalc {
@@ -68,6 +68,7 @@ namespace JRCudaCalc {
 	}
 	void DoCalc(std::vector<Boid*>& AllBoids)
 	{
+		GameLogging::GetInstance()->DebugLog("OI");
 		int size = AllBoids.size();
 		CudaBoidStruct* boids = new CudaBoidStruct[size];
 		MakeStructs(boids, AllBoids);
@@ -77,7 +78,9 @@ namespace JRCudaCalc {
 		cudaMalloc((void**)&gpuBoids, arraySize);
 		cudaMemcpy(gpuBoids, boids, arraySize, cudaMemcpyHostToDevice);
 		//do calc
-		GPUDoCalc <<<NUMBLOCKS, NUMTHREADS>>> (gpuBoids, size, BOID_VISION_DISTANCE * BOID_VISION_DISTANCE, BOID_AVOID_DISTANCE * BOID_AVOID_DISTANCE);
+		float sqrVisDist = BOID_VISION_DISTANCE * BOID_VISION_DISTANCE;
+		float sqrAvoidDist = BOID_AVOID_DISTANCE * BOID_AVOID_DISTANCE;
+		GPUDoCalc <<<NUMBLOCKS, NUMTHREADS>>> (gpuBoids, size,sqrVisDist , sqrAvoidDist);
 		//copy back
 		cudaMemcpy(boids, gpuBoids, arraySize, cudaMemcpyDeviceToHost);
 		UnMakeStructs(AllBoids, boids);

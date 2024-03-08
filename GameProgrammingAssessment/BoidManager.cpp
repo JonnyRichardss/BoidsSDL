@@ -76,8 +76,9 @@ void BoidManager::PopulateNeighbours()
 	//GameClock::GetInstance()->TickProfilingSpecial("GPU DONE");
 	//delete[size] boidsInfos;
 
-
+	//GameClock::GetInstance()->TickProfilingSpecial("GPUSTART");
 	JRCudaCalc::DoCalc(AllBoids);
+	//GameClock::GetInstance()->TickProfilingSpecial("GPUDONE");
 }
 
 void BoidManager::MakeStructs(BoidInfo* boids) {

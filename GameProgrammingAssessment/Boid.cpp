@@ -58,17 +58,15 @@ void Boid::MakeBrian()
 
 void Boid::Update()
 {
-	
-	if (!hasNeighbours && GPU_CALC) {
-		manager->PopulateNeighbours();
+	if (GPU_CALC) {
+		if (!hasNeighbours) {
+			manager->PopulateNeighbours();
+		}
+		hasNeighbours = false;
 	}
 	else {
 		CPUCalc();
 	}
-	hasNeighbours = false;
-	//CPU calculate neighbours
-	//Neighbours.clear();
-	//Neighbours = GetVisibleBoids();
 	SteerTowards(steerTarget);
 	ScreenWrap();
 	DoRotation();

@@ -1,5 +1,5 @@
 #include "GameScene.h"
-
+#include "GameClock.h"
 GameScene::GameScene()
 {
     logging = GameLogging::GetInstance();
@@ -37,13 +37,14 @@ void GameScene::Update()
 {
     if (!initialised)
         Init();
-        
+    //GameClock::GetInstance()->TickProfilingSpecial("PREUP");
     for (GameObject* g : UpdateQueue) {
         RenderableComponent* newComponent = nullptr;
         if (g->UpdateAndRender(newComponent)) {
             renderer->Enqueue(newComponent);
         }
     }
+    //GameClock::GetInstance()->TickProfilingSpecial("POSTUP");
 }
 
 void GameScene::MoveStatics()
