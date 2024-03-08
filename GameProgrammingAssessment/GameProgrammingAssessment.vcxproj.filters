@@ -167,6 +167,9 @@
     <ClInclude Include="BoidManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CudaCalc.cuh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="USN_Stencil.ttf">
@@ -183,5 +186,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="CudaCalc.cu">
+      <Filter>Source Files</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

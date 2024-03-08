@@ -32,12 +32,17 @@ public:
 	void DrawBrianDebug();
 	void ParseStruct(BoidInfo info);
 	Vector2 steerTarget;
+	void DoSeparation(Vector2 vec);
+	void DoAlignment(Vector2 vec);
+	void DoCohesion(Vector2 vec);
+	int numNeighbours = 0;
+	bool hasNeighbours = false;
 protected:
 	
 	std::vector<Boid*> Neighbours;
-	int numNeighbours = 0;
+	
 	BoidManager* manager;
-	bool hasNeighbours = false;
+	
 	bool isBrian = false;
 	void Update();
 	void DoRotation();
@@ -46,9 +51,7 @@ protected:
 	void SteerTowards(Vector2 target);
 	std::vector<Boid*> GetVisibleBoids();
 	Vector2 GetBoidVec(Boid* other);
-	void DoSeparation(Vector2 vec);
-	void DoAlignment(Vector2 vec);
-	void DoCohesion(Vector2 vec);
+	
 	
 };
 #endif // !USE_BOID

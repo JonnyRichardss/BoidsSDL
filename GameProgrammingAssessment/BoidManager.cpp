@@ -1,8 +1,9 @@
 #include "BoidManager.h"
 #include "GameMath.h"
 #define _SILENCE_AMP_DEPRECATION_WARNINGS
-#include <amp.h>
+//#include <amp.h>
 #include "GameClock.h"
+#include "CudaCalc.cuh"
 BoidManager::BoidManager(GameScene* scene)
 {
 	for (int i = 0; i < NUM_BOIDS; i++) {
@@ -21,9 +22,14 @@ void BoidManager::PopulateNeighbours()
 {
 	//most of this adapted from
 	//https://github.com/SebLague/Boids/blob/master/Assets/Scripts/BoidCompute.compute
-	int size = AllBoids.size();
-	BoidInfo* boidsInfos = new BoidInfo[size];
-	MakeStructs(boidsInfos);
+	//int size = AllBoids.size();
+	//BoidInfo* boidsInfos = new BoidInfo[size];
+	//MakeStructs(boidsInfos);
+
+
+	//THIS IS ALL CPPAMP CODE
+	/*
+	
 	concurrency::array_view<BoidInfo, 1>boids(size, boidsInfos);
 	//concurrency::array_view<BoidInfo, 1>boidsOut(size, boidsInfos);
 	//boidsOut.discard_data();
@@ -48,7 +54,7 @@ void BoidManager::PopulateNeighbours()
 				}
 				if (sqrDistance < avoidDist * avoidDist) {
 					//float invSqr = 1.0 / sqrDistance;
-					float invSqr = 1.0;
+					float invSqr = 1;
 					boids[i].sepX -= offsetX * invSqr;
 					boids[i].sepY -= offsetY * invSqr;
 				}
@@ -56,15 +62,24 @@ void BoidManager::PopulateNeighbours()
 		}
 		
 	);
+	
+
 
 	for (int i = 0; i < size;i++) {
 		Boid* b = AllBoids[i];
 		b->steerTarget = Vector2::zero();
 		b->ParseStruct(boids[i]);
 	}
+	*/
+
+
 	//GameClock::GetInstance()->TickProfilingSpecial("GPU DONE");
-	delete[size] boidsInfos;
+	//delete[size] boidsInfos;
+
+
+	JRCudaCalc::DoCalc(AllBoids);
 }
+
 void BoidManager::MakeStructs(BoidInfo* boids) {
 	for (int i = 0; i < AllBoids.size();i++) {
 		Boid* b = AllBoids[i];
