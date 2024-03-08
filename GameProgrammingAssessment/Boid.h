@@ -42,6 +42,7 @@ protected:
 	void Update();
 	void DoRotation();
 	void ScreenWrap();
+	void CPUCalc();
 	void SteerTowards(Vector2 target);
 	std::vector<Boid*> GetVisibleBoids();
 	Vector2 GetBoidVec(Boid* other);

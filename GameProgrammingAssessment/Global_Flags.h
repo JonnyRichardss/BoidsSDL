@@ -28,15 +28,16 @@ static bool ENGINE_QUIT_FLAG = false; //be aware this doesn't work the way you t
 
 static const float BOID_SIZE = 10.0f;
 static const float BOID_SPEED = 4.0f;
-static const int NUM_BOIDS = 2000;
+static const int NUM_BOIDS = 200;
 static const float BOID_VISION_DISTANCE = 50.0f;
 static const float BOID_AVOID_DISTANCE = 50.0f;// will try change later
 static const float BOID_VISION_ANGLE = 3.141592653589;
 static const float BOID_STEER_MULTIPLIER = 0.05f;
-static const float BOID_SEPARATION_STRENGTH = 1.2f;
+static const float BOID_SEPARATION_STRENGTH = 1.0f;
 static const float BOID_ALIGNMENT_STRENGTH = 1.0f;
 static const float BOID_COHESION_STRENGTH = 1.0f;
 
+static const bool GPU_CALC = false;
 static const bool BRIAN_DEBUG = false;
 enum WaitMethods {BUSY,SDL,THREAD};
 static const WaitMethods GF_WAIT_METHOD = BUSY; //SDL seems to under-sleep and THREAD seems to over-sleep

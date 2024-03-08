@@ -47,7 +47,8 @@ void BoidManager::PopulateNeighbours()
 					boids[i].cohesY += boids[j].posY;
 				}
 				if (sqrDistance < avoidDist * avoidDist) {
-					float invSqr = 1.0 / sqrDistance;
+					//float invSqr = 1.0 / sqrDistance;
+					float invSqr = 1.0;
 					boids[i].sepX -= offsetX * invSqr;
 					boids[i].sepY -= offsetY * invSqr;
 				}

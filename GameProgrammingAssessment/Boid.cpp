@@ -59,8 +59,11 @@ void Boid::MakeBrian()
 void Boid::Update()
 {
 	
-	if (!hasNeighbours) {
+	if (!hasNeighbours && GPU_CALC) {
 		manager->PopulateNeighbours();
+	}
+	else {
+		CPUCalc();
 	}
 	hasNeighbours = false;
 	//CPU calculate neighbours
@@ -93,6 +96,26 @@ void Boid::ScreenWrap()
 	}
 }
 
+void Boid::CPUCalc()
+{
+	steerTarget = Vector2::zero();
+	Neighbours.clear();
+	Neighbours = GetVisibleBoids();
+	Vector2 aligVec = Vector2::zero();
+	Vector2 sepVec = Vector2::zero();
+	Vector2 cohesVec = Vector2::zero();
+	for (Boid* b : Neighbours) {
+		Vector2 offset = GetBoidVec(b);
+		aligVec -= b->GetVelo();
+		cohesVec += b->GetPos();
+		sepVec -= offset;
+	}
+	DoSeparation(sepVec);
+	DoAlignment(aligVec);
+	DoCohesion(cohesVec);
+
+}
+
 void Boid::SteerTowards(Vector2 target)
 {
 	facing += Vector2::AngleBetweenRAD(velocity, target) * BOID_STEER_MULTIPLIER;
@@ -109,6 +132,7 @@ std::vector<Boid*> Boid::GetVisibleBoids()
 			output.push_back(b);
 		}
 	}
+	numNeighbours = output.size();
 	return output;
 }
 
