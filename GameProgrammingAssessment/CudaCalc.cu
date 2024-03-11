@@ -28,6 +28,7 @@ struct CudaBoidStruct {
 };
 //(as from my previous AMP code) most of this adapted from
 //https://github.com/SebLague/Boids/blob/master/Assets/Scripts/BoidCompute.compute
+//not anymore but *some* basics of the way it's calculated on the CPU are
 __global__ void GPUNeighbourCalc(CudaNeighbourStruct* boids, int size, float sqrVisDist) {
 	int itest = blockIdx.x;
 	
