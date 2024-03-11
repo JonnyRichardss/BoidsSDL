@@ -224,12 +224,4 @@ void Boid::DrawBrianDebug()
 	}
 }
 
-void Boid::ParseStruct(BoidInfo info)
-{
-	hasNeighbours = true;
-	this->numNeighbours = info.numNeighbours;
-	DoSeparation(Vector2(info.sepX,info.sepY));
-	DoAlignment(Vector2(info.aligX,info.aligY));
-	DoCohesion(Vector2(info.cohesX,info.cohesY));
-	
-}
+

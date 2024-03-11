@@ -11,7 +11,6 @@ public:
 	~BoidManager();
 	std::vector<Boid*> AllBoids;
 	void PopulateNeighbours();
-	void MakeStructs(BoidInfo* boids);
 };
 #endif // !USE_BOIDMANAGER
 

@@ -3,25 +3,6 @@
 #define USE_BOID
 #include "GameObject.h"
 class BoidManager; //fwd def
-struct BoidInfo {
-	int id;
-	//Vector2 position;
-	float posX;
-	float posY;
-	//Vector2 velocity;
-	float velX;
-	float velY;
-	//Vector2 SepVec;
-	float sepX=0;
-	float sepY=0;
-	//Vector2 AligVec;
-	float aligX=0;
-	float aligY=0;
-	//Vector2 CohesVec;
-	float cohesX=0;
-	float cohesY=0;
-	int numNeighbours=0;
-};
 class Boid : public GameObject
 {
 public:
@@ -30,20 +11,17 @@ public:
 	void SetManager(BoidManager* newManager);
 	void MakeBrian();
 	void DrawBrianDebug();
-	void ParseStruct(BoidInfo info);
+
+	
+	std::vector<Boid*> Neighbours;
+	bool hasNeighbours = false;
+protected:
 	Vector2 steerTarget;
 	void DoSeparation(Vector2 vec);
 	void DoAlignment(Vector2 vec);
 	void DoCohesion(Vector2 vec);
 	int numNeighbours = 0;
-	std::vector<Boid*> Neighbours;
-	bool hasNeighbours = false;
-protected:
-	
-	
-	
 	BoidManager* manager;
-	
 	bool isBrian = false;
 	void Update();
 	void DoRotation();
