@@ -5,6 +5,7 @@
 #include "GameRNG.h"
 #include "BoidScene.h"
 #include "BoidManager.h"
+#include <math.h>
 void Boid::Init()
 {
 	BoundingBox = Vector2(BOID_SIZE, BOID_SIZE * 2);
@@ -76,6 +77,7 @@ void Boid::Update()
 void Boid::DoRotation()
 {
 	velocity = Vector2(sin(facing) * BOID_SPEED, cos(facing)*BOID_SPEED);
+	//facing = Vector2::AngleBetweenRAD(Vector2::up(), velocity);
 }
 
 void Boid::ScreenWrap()
@@ -106,7 +108,8 @@ void Boid::CPUCalc()
 		Vector2 offset = GetBoidVec(b);
 		aligVec -= b->GetVelo();
 		cohesVec += b->GetPos();
-		sepVec -= offset;
+		if(offset.GetMagnitude() < BOID_AVOID_DISTANCE)
+			sepVec -= offset;
 	}
 	DoSeparation(sepVec);
 	DoAlignment(aligVec);
@@ -117,6 +120,9 @@ void Boid::CPUCalc()
 void Boid::SteerTowards(Vector2 target)
 {
 	facing += Vector2::AngleBetweenRAD(velocity, target) * BOID_STEER_MULTIPLIER;
+	//actually steer in velocity thanks
+
+
 }
 
 std::vector<Boid*> Boid::GetVisibleBoids()
@@ -126,7 +132,7 @@ std::vector<Boid*> Boid::GetVisibleBoids()
 		Vector2 vec = GetBoidVec(b);
 		if (b == this)
 			continue;
-		if (vec.GetMagnitude() < BOID_VISION_DISTANCE && abs(Vector2::AngleBetweenRAD(velocity, vec)) < BOID_VISION_ANGLE) {
+		if (vec.GetMagnitude() < BOID_VISION_DISTANCE) {
 			output.push_back(b);
 		}
 	}
@@ -138,7 +144,10 @@ Vector2 Boid::GetBoidVec(Boid* other)
 {
 	return position - other->position;
 }
-
+Vector2 Boid::ConvertToTarget(Vector2 vector) {
+	Vector2 v = vector.Normalise() * BOID_SPEED - velocity;
+	return v.Normalise() * std::min(v.GetMagnitude(), BOID_STEER_MULTIPLIER);
+}
 void Boid::DoSeparation(Vector2 vec)
 {
 	/*

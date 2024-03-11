@@ -51,6 +51,8 @@ protected:
 	void SteerTowards(Vector2 target);
 	std::vector<Boid*> GetVisibleBoids();
 	Vector2 GetBoidVec(Boid* other);
+
+	Vector2 ConvertToTarget(Vector2 vector);
 	
 	
 };

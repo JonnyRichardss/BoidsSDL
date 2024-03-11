@@ -61,6 +61,8 @@ struct Vector2 {
     }
     Vector2 Normalise() {
         float mag = GetMagnitude();
+        if (mag == 0)
+            return Vector2::zero();
         float _x = x / mag;
         float _y = y / mag;
         return Vector2(_x, _y);
