@@ -36,10 +36,11 @@ public:
 	void DoAlignment(Vector2 vec);
 	void DoCohesion(Vector2 vec);
 	int numNeighbours = 0;
+	std::vector<Boid*> Neighbours;
 	bool hasNeighbours = false;
 protected:
 	
-	std::vector<Boid*> Neighbours;
+	
 	
 	BoidManager* manager;
 	
@@ -47,7 +48,7 @@ protected:
 	void Update();
 	void DoRotation();
 	void ScreenWrap();
-	void CPUCalc();
+	void Calc();
 	void SteerTowards(Vector2 target);
 	std::vector<Boid*> GetVisibleBoids();
 	Vector2 GetBoidVec(Boid* other);

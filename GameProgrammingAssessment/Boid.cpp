@@ -59,6 +59,7 @@ void Boid::MakeBrian()
 
 void Boid::Update()
 {
+	
 	if (GPU_CALC) {
 		if (!hasNeighbours) {
 			manager->PopulateNeighbours();
@@ -66,12 +67,15 @@ void Boid::Update()
 		hasNeighbours = false;
 	}
 	else {
-		CPUCalc();
+		Neighbours = GetVisibleBoids();
+		
 	}
+	numNeighbours = Neighbours.size();
+	Calc();
 	SteerTowards(steerTarget);
 	ScreenWrap();
 	DoRotation();
-	
+	Neighbours.clear();
 }
 
 void Boid::DoRotation()
@@ -96,20 +100,17 @@ void Boid::ScreenWrap()
 	}
 }
 
-void Boid::CPUCalc()
+void Boid::Calc()
 {
 	steerTarget = Vector2::zero();
-	Neighbours.clear();
-	Neighbours = GetVisibleBoids();
 	Vector2 aligVec = Vector2::zero();
 	Vector2 sepVec = Vector2::zero();
 	Vector2 cohesVec = Vector2::zero();
 	for (Boid* b : Neighbours) {
-		Vector2 offset = GetBoidVec(b);
+		
 		aligVec -= b->GetVelo();
 		cohesVec += b->GetPos();
-		if(offset.GetMagnitude() < BOID_AVOID_DISTANCE)
-			sepVec -= offset;
+		sepVec -= GetBoidVec(b);
 	}
 	DoSeparation(sepVec);
 	DoAlignment(aligVec);
@@ -136,7 +137,7 @@ std::vector<Boid*> Boid::GetVisibleBoids()
 			output.push_back(b);
 		}
 	}
-	numNeighbours = output.size();
+	//numNeighbours = output.size();
 	return output;
 }
 

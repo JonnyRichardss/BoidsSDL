@@ -6,16 +6,17 @@
 #include "CudaCalc.cuh"
 BoidManager::BoidManager(GameScene* scene)
 {
-	for (int i = 0; i < NUM_BOIDS; i++) {
+	for (int i = 0; i < NUM_BOIDS-1; i++) { 
 		AllBoids.push_back(new Boid());
 		AllBoids[i]->SetOwner(scene);
 		AllBoids[i]->SetManager(this);
 	}
-
+	JRCudaCalc::Init(AllBoids.size() + 1);
 }
 
 BoidManager::~BoidManager()
 {
+	JRCudaCalc::Clear();
 }
 
 void BoidManager::PopulateNeighbours()
@@ -77,7 +78,7 @@ void BoidManager::PopulateNeighbours()
 	//delete[size] boidsInfos;
 
 	//GameClock::GetInstance()->TickProfilingSpecial("GPUSTART");
-	JRCudaCalc::DoCalc(AllBoids);
+	JRCudaCalc::GetNeighboursCUDA(AllBoids);
 	//GameClock::GetInstance()->TickProfilingSpecial("GPUDONE");
 }
 
