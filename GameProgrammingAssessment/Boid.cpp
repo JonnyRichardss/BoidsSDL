@@ -121,6 +121,7 @@ void Boid::Calc()
 void Boid::SteerTowards(Vector2 target)
 {
 	facing += Vector2::AngleBetweenRAD(velocity, target) * BOID_STEER_MULTIPLIER;
+	facing += (RNG::randf(0, RAND_WALK_SIZE_RAD *2) - RAND_WALK_SIZE_RAD);
 	//actually steer in velocity thanks
 
 

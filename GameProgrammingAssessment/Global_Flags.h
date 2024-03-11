@@ -1,7 +1,7 @@
 #ifndef USE_GAMEGLOBALS
 #define USE_GAMEGLOBALS
 //SOME OF THESE CAN PROBABLY BE MACROS SO THEY COMPILE OUT THE CODE THEY POINT TO BUT IM NOT ENTIRELY SURE THATS REALLY NECESSARY
-static constexpr int FRAME_CAP = 60;
+static constexpr int FRAME_CAP = 30;
 
 static constexpr int WINDOW_WIDTH = 640;
 static constexpr int WINDOW_HEIGHT = 480;
@@ -28,16 +28,16 @@ static bool ENGINE_QUIT_FLAG = false; //be aware this doesn't work the way you t
 
 static constexpr float BOID_SIZE = 10.0f;
 static constexpr float BOID_SPEED = 4.0f;
-static constexpr int NUM_BOIDS = 1024;
-
+static constexpr int NUM_BOIDS = 2048;
+static constexpr int NEIGHBOUR_STORAGE_DIV = 1;
 static constexpr float BOID_VISION_DISTANCE = 50.0f;
 static constexpr float BOID_AVOID_DISTANCE = 40.0f;// will try change later
 static constexpr float BOID_VISION_ANGLE = 3.141592653589;
-static constexpr float BOID_STEER_MULTIPLIER = 0.05f;
+static constexpr float BOID_STEER_MULTIPLIER = 0.07f;
 static constexpr float BOID_SEPARATION_STRENGTH = 1.0f;
 static constexpr float BOID_ALIGNMENT_STRENGTH = 1.0f;
 static constexpr float BOID_COHESION_STRENGTH =1.0f;
-
+static constexpr float RAND_WALK_SIZE_RAD = 0.1f;
 static constexpr bool GPU_CALC = true;
 static constexpr bool BRIAN_DEBUG = false;
 
